@@ -34,9 +34,19 @@ public class ParkingSpotService {
         return parkingSpotRepository.findAll().stream().map(obj -> new ParkingSpotDTO(obj)).collect(Collectors.toList());
     }
     @Transactional
-    public ParkingSpot update (ParkingSpot obj) {
-        findById(obj.getId());
-        return parkingSpotRepository.save(obj);
+    public ParkingSpotDTO update (ParkingSpotDTO spotDTO, Integer id) {
 
+        spotDTO.setId(id);
+        ParkingSpot obj = new ParkingSpot(spotDTO);
+        findById(obj.getId());
+        if(spotDTO.getSolicitationDate() == null) {
+            obj.setSolicitationDate(LocalDateTime.now(ZoneId.of("UTC")));
+        }
+        return new ParkingSpotDTO(parkingSpotRepository.save(obj));
+
+    }
+    public void delete (Integer id) {
+        findById(id);
+        parkingSpotRepository.deleteById(id);
     }
 }

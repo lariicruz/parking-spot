@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -32,17 +31,14 @@ public class ParkingSpotResource {
     public ResponseEntity<List<ParkingSpotDTO>> findAll() {
         return ResponseEntity.ok().body(parkingSpotService.findAll());
     }
-    @PutMapping(value = "/id")
-    public ResponseEntity< ParkingSpot> update (@RequestBody @Valid ParkingSpotDTO spotDTO, @PathVariable Integer id) {
-        spotDTO.setId(id);
-        ParkingSpot obj = new ParkingSpot();
-       return ResponseEntity.ok().body(parkingSpotService.update(obj));
-
+    @PutMapping(value = "/{id}")
+    public ResponseEntity< ParkingSpotDTO> update (@RequestBody @Valid ParkingSpotDTO spotDTO, @PathVariable Integer id) {
+       return ResponseEntity.ok().body(parkingSpotService.update(spotDTO, id));
+    }
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete (@PathVariable Integer id) {
+        parkingSpotService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
-//    @PutMapping(value = "/{id}")
-//    public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDTO, @PathVariable Integer id) {
-//        Categoria obj = service.fromDTO(objDTO);
-//        obj.setId(id);
-//        service.update(obj);
-//        return ResponseEntity.noContent().build();
+
